@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caleb A. Shaw</title>
+<meta name="description" content="Caleb A. Shaw, Ph.D. candidate in Nuclear Engineering at NC State. Hybrid Monte Carlo / deterministic methods for particle transport, variance reduction, and HPC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: two columns on desktop — a sticky identity rail (name, availability, contact) and a reading column of sections; one column on phones. */
+:root {
+  --paper: #f5f7f9;
+  --surface: #ffffff;
+  --ink: #142231;
+  --muted: #566577;
+  --rule: #d9e0e7;
+  --accent: #1d5bc4;      /* Cherenkov blue */
+  --accent-soft: #e4edfb;
+  --dot-a: #8a97a6;       /* analog particles */
+  --dot-b: #1d5bc4;       /* weight-windowed particles */
+  --serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --sans: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.55rem;
+  --step-3: 2.4rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d141c; --surface: #121c27; --ink: #e3e9f0; --muted: #98a6b6;
+    --rule: #233243; --accent: #79a9ff; --accent-soft: #16263d;
+    --dot-a: #5f6f80; --dot-b: #79a9ff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d141c; --surface: #121c27; --ink: #e3e9f0; --muted: #98a6b6;
+  --rule: #233243; --accent: #79a9ff; --accent-soft: #16263d;
+  --dot-a: #5f6f80; --dot-b: #79a9ff; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; text-wrap: balance; line-height: 1.2; margin: 0; }
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-block: 56px 72px;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 64px;
+}
+
+/* Identity rail */
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 40px); align-self: start; display: grid; gap: 22px; }
+.rail h1 { font-size: var(--step-3); letter-spacing: -0.01em; }
+.role { color: var(--muted); margin: 6px 0 0; line-height: 1.45; }
+.status {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 12px 14px;
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+.status strong { display: block; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.contact { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: 0.95rem; }
+.contact li { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.contact .k { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); width: 54px; flex: none; text-transform: uppercase; letter-spacing: 0.06em; }
+.email { font-family: var(--mono); font-size: 0.86rem; user-select: all; overflow-wrap: anywhere; }
+.copy {
+  font: 500 0.72rem var(--sans); color: var(--muted); background: none;
+  border: 1px solid var(--rule); border-radius: 3px; padding: 1px 7px; cursor: pointer;
+}
+.copy:hover { color: var(--accent); border-color: var(--accent); }
+.cv-btn {
+  display: inline-flex; align-items: center; gap: 8px; justify-self: start;
+  background: var(--ink); color: var(--paper); text-decoration: none;
+  font-weight: 600; font-size: 0.92rem; padding: 9px 16px; border-radius: 3px;
+}
+.cv-btn:hover { background: var(--accent); }
+
+/* Reading column */
+main { display: grid; gap: 60px; min-width: 0; }
+section { display: grid; gap: 18px; min-width: 0; }
+.eyebrow {
+  font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: 8px; margin: 0;
+}
+.lede { font-family: var(--serif); font-size: var(--step-1); line-height: 1.55; max-width: 62ch; margin: 0; }
+p { margin: 0; max-width: 66ch; }
+
+/* Figure */
+figure.ww { margin: 4px 0 0; background: var(--surface); border: 1px solid var(--rule); padding: 20px; display: grid; gap: 16px; }
+.panel { display: grid; gap: 6px; }
+.panel-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 0.86rem; }
+.panel-head b { font-weight: 600; }
+.panel-head span { color: var(--muted); font-family: var(--mono); font-size: 0.76rem; }
+canvas { display: block; width: 100%; height: 84px; }
+.counts { display: grid; grid-template-columns: repeat(10, 1fr); font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; }
+figcaption { font-size: 0.86rem; color: var(--muted); line-height: 1.5; max-width: 70ch; }
+
+/* Research threads */
+.threads { display: grid; gap: 28px; }
+.thread { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 20px; }
+.thread .tag { font-family: var(--mono); font-size: 0.76rem; color: var(--muted); padding-top: 4px; line-height: 1.5; }
+.thread h3 { font-size: var(--step-1); margin-bottom: 6px; }
+.thread p { color: var(--ink); }
+.refs { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin-top: 8px; }
+.refs a { text-decoration: none; }
+
+/* Publications */
+.pubgroup { display: grid; gap: 14px; }
+.pubgroup h3 { font-family: var(--sans); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+ol.pubs { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+ol.pubs li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 12px; }
+.pid { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); padding-top: 3px; }
+.ptitle { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; line-height: 1.35; }
+.pmeta { color: var(--muted); font-size: 0.92rem; }
+.plinks { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--mono); font-size: 0.78rem; margin-top: 4px; }
+.me { font-weight: 600; color: var(--ink); }
+
+/* Software */
+.software { background: var(--surface); border: 1px solid var(--rule); padding: 22px; display: grid; gap: 12px; }
+.software h3 { font-size: var(--step-2); }
+.software ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 6px; max-width: 66ch; }
+.machines { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-family: var(--mono); font-size: 0.74rem; border: 1px solid var(--rule); padding: 2px 9px; border-radius: 99px; color: var(--muted); }
+
+/* Bio placeholder: delete once the bio is written */
+.placeholder { color: var(--muted); font-style: italic; border: 1px dashed var(--rule); padding: 18px; max-width: none; }
+
+footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 18px; }
+
+@media (max-width: 860px) {
+  .page { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-block: 32px 56px; }
+  .rail { position: static; }
+}
+@media (max-width: 520px) {
+  :root { --step-3: 2rem; }
+  .thread { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  figure.ww { padding: 14px; }
+  .counts { font-size: 0.6rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <aside class="rail">
+    <div>
+      <h1>Caleb A. Shaw</h1>
+      <p class="role">Ph.D. candidate, Nuclear Engineering<br>North Carolina State University</p>
+    </div>
+
+    <div class="status">
+      <strong>On the job market</strong>
+      Defending May 2027. Looking for postdoctoral and staff roles in computational transport, Monte Carlo methods, and HPC starting summer 2027. U.S. citizen.
+    </div>
+
+    <ul class="contact">
+      <li><span class="k">Email</span><span class="email" id="email">cashaw4@ncsu.edu</span><button class="copy" id="copy-email" type="button">Copy</button></li>
+      <li><span class="k">Scholar</span><a href="https://scholar.google.com/citations?user=O_BCoOAAAAAJ" target="_blank" rel="noopener">Google Scholar</a></li>
+      <li><span class="k">Code</span><a href="https://github.com/mcdc-project/mcdc" target="_blank" rel="noopener">MC/DC on GitHub</a></li>
+      <!-- Add these once you have the URLs:
+      <li><span class="k">GitHub</span><a href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener">github.com/YOUR-USERNAME</a></li>
+      <li><span class="k">ORCID</span><a href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="noopener">0000-0000-0000-0000</a></li>
+      -->
+      <li><span class="k">Based</span>Raleigh, NC</li>
+    </ul>
+
+    <a class="cv-btn" href="cv.pdf" target="_blank" rel="noopener">Curriculum vitae (PDF)</a>
+  </aside>
+
+  <main>
+    <section id="about">
+      <h2 class="eyebrow">About</h2>
+      <!-- ABOUT: replace the placeholder paragraph below with your own bio.
+           Optional: give your first paragraph class="lede" for the larger serif style, e.g.
+           <p class="lede">One or two sentences on what you work on.</p>
+           <p>More detail.</p> -->
+      <p class="placeholder">Your bio goes here.</p>
+    </section>
+
+    <section id="research">
+      <h2 class="eyebrow">Research</h2>
+
+      <figure class="ww" aria-labelledby="ww-cap">
+        <div class="panel">
+          <div class="panel-head"><b>Analog Monte Carlo</b><span>particles per cell, source at left</span></div>
+          <canvas id="cv-analog" aria-hidden="true"></canvas>
+          <div class="counts" id="counts-analog"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><b>Hybrid weight windows</b><span>same total particle count</span></div>
+          <canvas id="cv-ww" aria-hidden="true"></canvas>
+          <div class="counts" id="counts-ww"></div>
+        </div>
+        <figcaption id="ww-cap">Illustration of the goal of global variance reduction in a 10-cell slab. Without it, the particle population collapses with depth and the far cells have almost no samples. Weight windows centered on a low-order hybrid solution split and roulette particles so the population stays nearly uniform across the domain.</figcaption>
+      </figure>
+
+      <div class="threads">
+        <article class="thread">
+          <div class="tag">Variance reduction</div>
+          <div>
+            <h3>Hybrid weight windows for time-dependent Monte Carlo</h3>
+            <p>An automatic weight window method for global variance reduction in time-dependent problems. Window centers come from an auxiliary hybrid MC/deterministic low-order second-moment (LOSM) solve, discretized to second order in space and time. Efficiency is measured by figure of merit and relative error against an analytic benchmark.</p>
+            <div class="refs"><a href="#pubs">J1</a> · <a href="#pubs">C2</a></div>
+          </div>
+        </article>
+        <article class="thread">
+          <div class="tag">Hybrid methods</div>
+          <div>
+            <h3>Two-level macro–micro transport methods</h3>
+            <p>The transport solution is split into a deterministic macro component and a Monte Carlo micro component. Current work extends the framework with quasi-Monte Carlo sampling and maximum-entropy closures. This is the core of my dissertation, <em>Hybrid Stochastic–Deterministic Methods Based on Coupled Moment Equations for Linear Transport Problems</em>.</p>
+            <div class="refs"><a href="#pubs">C1</a> · <a href="#pubs">S1</a> · <a href="#pubs">S2</a></div>
+          </div>
+        </article>
+        <article class="thread">
+          <div class="tag">HPC</div>
+          <div>
+            <h3>Domain decomposition at scale</h3>
+            <p>I designed and prototyped MC/DC's domain decomposition algorithm. It removed the memory bottleneck that limited problem size in massively parallel runs and enabled simulations on LLNL supercomputers at up to 512 nodes. I've also applied dynamic mode decomposition to Monte Carlo tallies to predict the flux for weight window generation.</p>
+            <div class="refs"><a href="#pubs">J2</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="pubs">
+      <h2 class="eyebrow">Publications</h2>
+
+      <div class="pubgroup">
+        <h3>Journal articles</h3>
+        <ol class="pubs">
+          <li>
+            <span class="pid">J1</span>
+            <div>
+              <div class="ptitle">Hybrid Weight Window Method for Global Time-Dependent Monte Carlo Particle Transport Calculations</div>
+              <div class="pmeta"><span class="me">C. A. Shaw</span> and D. Y. Anistratov. <em>Journal of Computational and Theoretical Transport</em>, 2026.</div>
+              <div class="plinks"><a href="https://doi.org/10.1080/23324309.2026.2638248" target="_blank" rel="noopener">doi:10.1080/23324309.2026.2638248</a></div>
+            </div>
+          </li>
+          <li>
+            <span class="pid">J2</span>
+            <div>
+              <div class="ptitle">Monte Carlo / Dynamic Code (MC/DC): An Accelerated Python Package for Fully Transient Neutron Transport and Rapid Methods Development</div>
+              <div class="pmeta">J. P. Morgan et al. (incl. <span class="me">C. A. Shaw</span>). <em>Journal of Open Source Software</em>, 9(96):6415, 2024.</div>
+              <div class="plinks"><a href="https://doi.org/10.21105/joss.06415" target="_blank" rel="noopener">doi:10.21105/joss.06415</a></div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Conference papers and transactions</h3>
+        <ol class="pubs">
+          <li>
+            <span class="pid">C1</span>
+            <div>
+              <div class="ptitle">Hybrid Two-Level Transport Method with Solution Decomposition in Macro and Micro Components</div>
+              <div class="pmeta"><span class="me">C. A. Shaw</span> and D. Y. Anistratov. <em>Transactions of the American Nuclear Society</em>, 135, 2026 (to appear).</div>
+              <div class="plinks"><a href="https://arxiv.org/abs/2607.01346" target="_blank" rel="noopener">arXiv:2607.01346</a></div>
+            </div>
+          </li>
+          <li>
+            <span class="pid">C2</span>
+            <div>
+              <div class="ptitle">Hybrid Weight Window Techniques for Time-Dependent Monte Carlo Neutronics</div>
+              <div class="pmeta"><span class="me">C. A. Shaw</span> and D. Y. Anistratov. <em>Proc. M&amp;C 2025</em>, Denver, CO, 2025.</div>
+              <div class="plinks"><a href="https://arxiv.org/abs/2501.06144" target="_blank" rel="noopener">arXiv:2501.06144</a></div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Submitted</h3>
+        <ol class="pubs">
+          <li>
+            <span class="pid">S1</span>
+            <div>
+              <div class="ptitle">A Two-Level Hybrid Quasi-Monte Carlo / Deterministic Method for Particle Transport with Variance Reduction</div>
+              <div class="pmeta"><span class="me">C. A. Shaw</span> and D. Y. Anistratov. Submitted to M&amp;C 2027.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pid">S2</span>
+            <div>
+              <div class="ptitle">Hybrid Macro-Micro Method with Maximum Entropy Approximation for Particle Transport Problems</div>
+              <div class="pmeta"><span class="me">C. A. Shaw</span> and D. Y. Anistratov. Submitted to M&amp;C 2027.</div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="software">
+      <h2 class="eyebrow">Software</h2>
+      <div class="software">
+        <h3>MC/DC</h3>
+        <p>An open-source Python Monte Carlo transport code for fully transient problems, built for HPC with national laboratory and university collaborators in CEMeNT.</p>
+        <ul>
+          <li>Implemented its weight window methods.</li>
+          <li>Designed and prototyped its domain decomposition algorithm.</li>
+        </ul>
+        <div class="machines" aria-label="Systems used">
+          <span class="chip">LLNL Dane</span><span class="chip">LLNL Quartz</span><span class="chip">LLNL Tuolumne</span><span class="chip">up to 512 nodes</span>
+        </div>
+        <div class="plinks"><a href="https://github.com/mcdc-project/mcdc" target="_blank" rel="noopener">Source on GitHub</a><a href="https://mcdc.readthedocs.io/" target="_blank" rel="noopener">Documentation</a></div>
+      </div>
+    </section>
+
+    <footer>Last updated October 2026.</footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  // Copy email
+  var btn = document.getElementById('copy-email');
+  var email = document.getElementById('email');
+  btn.addEventListener('click', function () {
+    var text = email.textContent.trim();
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(email);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1600);
+      }, selectIt);
+    } else { selectIt(); }
+  });
+
+  // Weight window illustration: same total particles, two distributions over 10 cells.
+  var CELLS = 10, TOTAL = 200;
+  function rng(seed) { return function () { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
+  function analogCounts() {
+    var w = [], s = 0;
+    for (var i = 0; i < CELLS; i++) { w.push(Math.exp(-0.75 * i)); s += w[i]; }
+    var c = w.map(function (x) { return Math.round(TOTAL * x / s); });
+    c[0] += TOTAL - c.reduce(function (a, b) { return a + b; }, 0);
+    return c;
+  }
+  function wwCounts() {
+    var jitter = [1, -2, 2, 0, -1, 1, -2, 2, -1, 0];
+    return jitter.map(function (j) { return TOTAL / CELLS + j; });
+  }
+  var sets = [
+    { canvas: 'cv-analog', counts: 'counts-analog', data: analogCounts(), color: '--dot-a', seed: 7 },
+    { canvas: 'cv-ww', counts: 'counts-ww', data: wwCounts(), color: '--dot-b', seed: 11 }
+  ];
+  sets.forEach(function (s) {
+    document.getElementById(s.counts).innerHTML = s.data.map(function (n) { return '<span>' + n + '</span>'; }).join('');
+  });
+
+  function draw() {
+    var cs = getComputedStyle(document.documentElement);
+    var rule = cs.getPropertyValue('--rule').trim();
+    var ink = cs.getPropertyValue('--muted').trim();
+    sets.forEach(function (s) {
+      var cv = document.getElementById(s.canvas);
+      var dpr = window.devicePixelRatio || 1;
+      var W = cv.clientWidth, H = cv.clientHeight;
+      if (!W) return;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      var ctx = cv.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      var cw = W / CELLS;
+      // cell boundaries
+      ctx.strokeStyle = rule; ctx.lineWidth = 1;
+      for (var i = 0; i <= CELLS; i++) {
+        var x = Math.round(i * cw) + 0.5;
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      }
+      ctx.beginPath(); ctx.moveTo(0, 0.5); ctx.lineTo(W, 0.5); ctx.moveTo(0, H - 0.5); ctx.lineTo(W, H - 0.5); ctx.stroke();
+      // source edge
+      ctx.fillStyle = ink; ctx.fillRect(0, 0, 3, H);
+      // particles
+      var r = rng(s.seed);
+      ctx.fillStyle = cs.getPropertyValue(s.color).trim();
+      var rad = Math.max(1.6, Math.min(2.4, W / 320));
+      s.data.forEach(function (n, i) {
+        for (var k = 0; k < n; k++) {
+          var px = i * cw + rad + 2 + r() * (cw - 2 * rad - 4);
+          var py = rad + 3 + r() * (H - 2 * rad - 6);
+          ctx.beginPath(); ctx.arc(px, py, rad, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+    });
+  }
+  draw();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  window.addEventListener('resize', draw);
+  try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw); } catch (e) {}
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+</body>
+</html>
