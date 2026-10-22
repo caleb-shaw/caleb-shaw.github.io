@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Caleb A. Shaw</title>
-<meta name="description" content="Caleb A. Shaw, Ph.D. candidate in Nuclear Engineering at NC State. Hybrid Monte Carlo / deterministic methods for particle transport, variance reduction, and HPC.">
+<meta name="description" content="Caleb A. Shaw, Ph.D. student in Nuclear Engineering at NC State. Hybrid Monte Carlo / deterministic methods for particle transport, variance reduction, and HPC.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -148,6 +148,14 @@ ol.pubs li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 12p
 .machines { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { font-family: var(--mono); font-size: 0.74rem; border: 1px solid var(--rule); padding: 2px 9px; border-radius: 99px; color: var(--muted); }
 
+/* Experience */
+ol.exp { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+ol.exp li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 16px; }
+.exp-when { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.exp-role { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; line-height: 1.35; }
+.exp-org { color: var(--muted); font-size: 0.94rem; }
+.exp-detail { font-size: 0.92rem; margin-top: 4px; max-width: 66ch; }
+
 /* Education */
 ol.edu { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
 ol.edu li { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: 16px; }
@@ -166,16 +174,16 @@ footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--ru
 @media (max-width: 520px) {
   :root { --step-3: 2rem; }
   .thread { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  ol.exp li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }
 </style>
 </head>
 <body>
-
 <div class="page">
   <aside class="rail">
     <div>
       <h1>Caleb A. Shaw</h1>
-      <p class="role">Ph.D. candidate, Nuclear Engineering<br>North Carolina State University</p>
+      <p class="role">Ph.D. student, Nuclear Engineering<br>North Carolina State University</p>
     </div>
 
     <div class="status">
@@ -184,7 +192,7 @@ footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--ru
     </div>
 
     <ul class="contact">
-      <li><span class="k">Email</span><span class="email" id="email">cashaw4@ncsu.edu</span><button class="copy" id="copy-email" type="button">Copy</button></li>
+      <li><span class="k">Email</span><span class="email" id="email">shac170@gmail.com</span><button class="copy" id="copy-email" type="button">Copy</button></li>
       <li><span class="k">Scholar</span><a href="https://scholar.google.com/citations?user=O_BCoOAAAAAJ" target="_blank" rel="noopener">Google Scholar</a></li>
       <li><span class="k">Code</span><a href="https://github.com/mcdc-project/mcdc" target="_blank" rel="noopener">MC/DC on GitHub</a></li>
       <!-- Add these once you have the URLs:
@@ -204,11 +212,11 @@ footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--ru
         I work in the nuclear engineering department, under the guidance of Dr. Dmitriy Anistratov.
         My research is focused on hybrid methods, combining stochastic and deterministic methods through low-order equations to achieve efficient variance reduction in transport solutions. 
         I am also a developer of MC/DC, a highly portable Python-based transport code that runs at scale on LLNL supercomputers such as Tuolumne, Quartz, and Dane.
-        MC/DC was started by the Center for Exascale Monte Carlo Neutron Transport (CEMeNT), a DOE PSAAP-III center and is now being extended to include charged particle transport under the Center for Advancing the Radiation Resilience of Electronics (CARRE), a PSAAP-IV center. 
-        I was an active member of CEMeNT and currently am in CARRE; my specific contributions are in domain decomposition, weight windows, and other hybrid methods development. </p>
+        MC/DC was started by the Center for Exascale Monte Carlo Neutron Transport (CEMeNT), a DOE PSAAP-III center, and is now being extended to include charged particle transport under the Center for Advancing the Radiation Resilience of Electronics (CARRE), a PSAAP-IV center. 
+        I was a member of CEMeNT and am now part of CARRE; my specific contributions are in domain decomposition, weight windows, and other hybrid methods development. </p>
         
-        </p>I am originally from Albuquerque, so the land of enchantment will always be special to me. 
-        In particular the beautiful hiking, climbing, and green chile rellenos. </p>
+        <p>I am originally from Albuquerque, so the land of enchantment will always be special to me. 
+        In particular I enjoy the beautiful hiking, climbing, and green chile rellenos. </p>
     </section>
 
     <section id="research">
@@ -338,6 +346,36 @@ footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--ru
         </div>
         <div class="plinks"><a href="https://github.com/mcdc-project/mcdc" target="_blank" rel="noopener">Source on GitHub</a><a href="https://mcdc.readthedocs.io/" target="_blank" rel="noopener">Documentation</a></div>
       </div>
+    </section>
+
+    <section id="experience">
+      <h2 class="eyebrow">Experience</h2>
+      <ol class="exp">
+        <li>
+          <span class="exp-when">2022–now</span>
+          <div>
+            <div class="exp-role">Graduate Research Assistant</div>
+            <div class="exp-org">NC State · DOE/NNSA PSAAP centers CEMeNT (PSAAP-III) and CARRE (PSAAP-IV)</div>
+            <div class="exp-detail">Methods and code development for MC/DC and CARRE's software. Presented at Tri-Lab Support Team meetings, DOE/NNSA annual reviews, and center symposia; contributed to CARRE's 2026 annual progress report.</div>
+          </div>
+        </li>
+        <li>
+          <span class="exp-when">Summer 2023</span>
+          <div>
+            <div class="exp-role">Graduate Student Intern</div>
+            <div class="exp-org">Los Alamos National Laboratory · XTD Division · Mentor: Todd Urbatsch</div>
+            <div class="exp-detail">Generated radiation-hydrodynamics data to train compressed-sensing models, and extended 2D r–z simulations to full 3D.</div>
+          </div>
+        </li>
+        <li>
+          <span class="exp-when">Summer 2022</span>
+          <div>
+            <div class="exp-role">Graduate Student Intern</div>
+            <div class="exp-org">Los Alamos National Laboratory · T-3 Division · Mentor: HyeongKae Park</div>
+            <div class="exp-detail">Implemented the method of manufactured solutions in a radiation-hydrodynamics code and verified it with spatial and temporal convergence studies.</div>
+          </div>
+        </li>
+      </ol>
     </section>
 
     <section id="education">
